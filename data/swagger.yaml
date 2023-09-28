@@ -1,0 +1,80 @@
+openapi: '3.1.0'
+info:
+  title: Book Reading API doks
+  description: The API for the Book Reading project
+  version: 1.0.0
+servers:
+  -url: http://localhost:3001/api
+paths:
+  /users/registration:
+    post:
+      tags: -Auth
+      summary: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCredentials'
+        required: true
+      responses:
+        '200':
+          description: User registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Validation error's description
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Error's description
+components:
+  shemas:
+    RegisterCredentials:
+      required:
+        - name
+        - emai
+        - password
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          $ref: '#/components/schemas/Password'
+    Password:
+      maxLength: 100
+      minLength: 6
+      type: string
+      description: User's password
+      example: qwerty
+    UserName:
+      maxLength: 32
+      minLength: 3
+      type: string
+      description: User's name
+      example: UserName
+    Email:
+      type: string
+      description: User's email
+      format: email
+      example: UserName@mail.com
+    User:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+        email:
+          $ref: '#/components/schemas/Email'
