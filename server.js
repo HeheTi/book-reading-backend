@@ -1,6 +1,5 @@
 const app = require('./app');
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 
 const { PORT, DB_HOST } = process.env;
 
