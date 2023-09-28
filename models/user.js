@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { mongooseHandleError } = require('../helpers');
+const Joi = require('joi');
 
 const emailRegex =
   /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
@@ -14,7 +15,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      minLength: 5,
+      minLength: 6,
       required: [true, 'Password is required'],
     },
     email: {
@@ -43,4 +44,15 @@ userSchema.post('save', mongooseHandleError);
 
 const User = model('user', userSchema);
 
-module.exports = User;
+const registrationSchema = Joi.object({
+  name: Joi.string().min(2).max(50).required(),
+  email: Joi.string().email().pattern(emailRegex).required(),
+  password: Joi.string().min(6).required(),
+  repeatPassword: Joi.string().valid(Joi.ref('password')).messages({
+    'any.only': 'Repeat password must match the password field',
+  }),
+});
+
+const schemas = { registrationSchema };
+
+module.exports = { User, schemas };
