@@ -4,7 +4,7 @@ info:
   description: The API for the Book Reading project
   version: 1.0.0
 servers:
-  -url: http://localhost:3001/api
+  -url: https://book-reading-5q3p.onrender.com/api
 paths:
   /users/registration:
     post:
@@ -44,8 +44,9 @@ components:
     RegisterCredentials:
       required:
         - name
-        - emai
+        - email
         - password
+        - repeatPassword
       type: object
       properties:
         name:
@@ -54,15 +55,16 @@ components:
           $ref: '#/components/schemas/Email'
         password:
           $ref: '#/components/schemas/Password'
+        repeatPassword:
+          $ref: '#/components/schemas/Password'
     Password:
-      maxLength: 100
       minLength: 6
       type: string
       description: User's password
-      example: qwerty
+      example: qwerty123
     UserName:
-      maxLength: 32
-      minLength: 3
+      maxLength: 50
+      minLength: 2
       type: string
       description: User's name
       example: UserName
