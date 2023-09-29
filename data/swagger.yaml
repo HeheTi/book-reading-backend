@@ -4,11 +4,12 @@ info:
   description: The API for the Book Reading project
   version: 1.0.0
 servers:
-  -url: https://book-reading-5q3p.onrender.com/api
+  - url: https://book-reading-5q3p.onrender.com/api
 paths:
   /users/registration:
     post:
-      tags: -Auth
+      tags:
+        - Auth
       summary: Register a new user
       requestBody:
         content:
@@ -40,7 +41,7 @@ paths:
               example:
                 message: Error's description
 components:
-  shemas:
+  schemas:
     RegisterCredentials:
       required:
         - name
@@ -80,3 +81,8 @@ components:
           $ref: '#/components/schemas/UserName'
         email:
           $ref: '#/components/schemas/Email'
+    InfoMessage:
+      type: object
+      properties:
+        message:
+          type: string
