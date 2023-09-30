@@ -8,9 +8,9 @@ const router = express.Router();
 router.post(
   '/registration',
   validateBody(schemas.registrationSchema),
-  ctrl.registrationUser
+  ctrl.registration
 );
-router.post('/login', () => {});
+router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 router.post('/logout', () => {});
 router.get('/current', () => {});
 
