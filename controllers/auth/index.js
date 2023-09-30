@@ -1,5 +1,9 @@
 const { ctrlWrapper } = require('../../helpers');
 
-const registrationUser = require('./registrationUser');
+const registration = require('./registration');
+const login = require('./login');
 
-module.exports = { registrationUser: ctrlWrapper(registrationUser) };
+module.exports = {
+  registration: ctrlWrapper(registration),
+  login: ctrlWrapper(login),
+};

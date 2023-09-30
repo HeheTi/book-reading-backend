@@ -53,6 +53,11 @@ const registrationSchema = Joi.object({
   }),
 });
 
-const schemas = { registrationSchema };
+const loginSchema = Joi.object({
+  email: Joi.string().email().pattern(emailRegex).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const schemas = { registrationSchema, loginSchema };
 
 module.exports = { User, schemas };
