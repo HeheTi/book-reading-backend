@@ -40,6 +40,40 @@ paths:
                 $ref: '#/components/schemas/InfoMessage'
               example:
                 message: Error's description
+  /users/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCredentials'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: '"name" is not allowed'
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Email or password invalid
 components:
   schemas:
     RegisterCredentials:
@@ -86,3 +120,30 @@ components:
       properties:
         message:
           type: string
+    LoginCredentials:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          $ref: '#/components/schemas/Password'
+    LoginResponse:
+      type: object
+      properties:
+        tokens:
+          type: object
+          properties:
+            accessToken:
+              type: string
+            refreshToken:
+              type: string
+        user:
+          type: object
+          properties:
+            name:
+              $ref: '#/components/schemas/UserName'
+            email:
+              $ref: '#/components/schemas/Email'
