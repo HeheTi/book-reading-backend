@@ -126,6 +126,28 @@ paths:
                 $ref: '#/components/schemas/InfoMessage'
               example:
                 message: Invalid signature
+  /users/current:
+    get:
+      tags:
+        - Auth
+      summary: Get user's info
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserResponse'
+        '401':
+          description: Unauthorized - Invalid or empty access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Unauthorized
 components:
   schemas:
     RegisterCredentials:
@@ -144,6 +166,16 @@ components:
           $ref: '#/components/schemas/Password'
         repeatPassword:
           $ref: '#/components/schemas/Password'
+    CurrentUserResponse:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            name:
+              $ref: '#/components/schemas/UserName'
+            email:
+              $ref: '#/components/schemas/Email'
     Password:
       minLength: 6
       type: string
@@ -200,7 +232,7 @@ components:
               $ref: '#/components/schemas/Token'
             refreshToken:
               type: string
-
+              $ref: '#/components/schemas/Token'
         user:
           type: object
           properties:
