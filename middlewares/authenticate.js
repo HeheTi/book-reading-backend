@@ -11,6 +11,14 @@ const authenticate = async (req, res, next) => {
     next(HttpError(401));
   }
 
+  // for swagger
+  if (token === 'superuser') {
+    const superuser = await User.findOne({ email: 'superuser@mail.com' });
+    req.user = superuser;
+    next();
+    return;
+  }
+
   try {
     const { id } = jwt.verify(token, SECRET_KEY_ACCESS);
     const user = await User.findById(id);

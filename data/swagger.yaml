@@ -12,11 +12,11 @@ paths:
         - Auth
       summary: Register a new user
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterCredentials'
-        required: true
       responses:
         '200':
           description: User registration successful
@@ -74,6 +74,58 @@ paths:
                 $ref: '#/components/schemas/InfoMessage'
               example:
                 message: Email or password invalid
+  /users/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout User
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          description: Unauthorized - Invalid or empty access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Unauthorized
+  /users/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshBody'
+      responses:
+        '200':
+          description: Successful refresh responses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: '"refreshToken" is required or invalid'
+        '403':
+          description: Invalid signature
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoMessage'
+              example:
+                message: Invalid signature
 components:
   schemas:
     RegisterCredentials:
@@ -115,6 +167,13 @@ components:
           $ref: '#/components/schemas/UserName'
         email:
           $ref: '#/components/schemas/Email'
+    RefreshBody:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          $ref: '#/components/schemas/Token'
     InfoMessage:
       type: object
       properties:
@@ -138,8 +197,10 @@ components:
           properties:
             accessToken:
               type: string
+              $ref: '#/components/schemas/Token'
             refreshToken:
               type: string
+
         user:
           type: object
           properties:
@@ -147,3 +208,19 @@ components:
               $ref: '#/components/schemas/UserName'
             email:
               $ref: '#/components/schemas/Email'
+    Token:
+      type: string
+      description: JWT access token
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MTZjM2ZhYWJlZmE1ZjlmYWM0ZjE2OCIsImlhdCI6MTY5NjE5Nzk2MiwiZXhwIjoxNjk2MTk4NTYyfQ.XwkKcvdq33L-pjhGHWhw19-GUHjVVYITJWTDx8R6GsU
+    RefreshResponse:
+      type: object
+      properties:
+        accessToken:
+          $ref: '#/components/schemas/Token'
+        refreshToken:
+          $ref: '#/components/schemas/Token'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
